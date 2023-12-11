@@ -12,6 +12,12 @@ from copy import deepcopy
 import math 
 import astar
 from icecream import ic
+import re
+from itertools import combinations,permutations
+from multiprocessing import Pool
+# https://docs.python.org/3/library/multiprocessing.html#multiprocessing.pool.Pool.map
+# with Pool(processes_count) as p:
+#   p.map(<function>, <input>)
 
 from util import *
 
