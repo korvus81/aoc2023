@@ -179,3 +179,5 @@ draw_map(mapin,pth)
 ic(plen-1)
 ic(len(pth)-1)
 # 5919 is too low 
+# 6031 is too low 
+# 6107 is too low

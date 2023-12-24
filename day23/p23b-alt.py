@@ -182,7 +182,7 @@ def find_all_paths(st,end,vertices,vertex_to_vertex_map, visited=None):
     #ic(st,paths)
     return paths
 
-def find_longest_path(st,end,vertices,vertex_to_vertex_map,vertex_to_vertex_len, visited=None):
+def find_longest_path(st,end,vertex_to_vertex_map,vertex_to_vertex_len, visited=None):
     if visited is None:
         visited = set()
     else:
@@ -190,24 +190,17 @@ def find_longest_path(st,end,vertices,vertex_to_vertex_map,vertex_to_vertex_len,
     visited.add(st)
     if st == end:
         return 0,[end] # no further length to go
-    #ic(st, vertex_to_vertex_map)
     next_vertices = vertex_to_vertex_map[st]
     longest = -1
     longest_path = []
     for n in next_vertices:
         if n not in visited:
-            if False and n == end:
-                dist = vertex_to_vertex_len[(st,n)]
+            dist,pth = find_longest_path(n,end,vertex_to_vertex_map,vertex_to_vertex_len, visited)
+            if dist >= 0:
+                dist += vertex_to_vertex_len[(st,n)]
                 if longest < dist:
                     longest = dist
-                    longest_path = [end]
-            else:
-                dist,pth = find_longest_path(n,end,vertices,vertex_to_vertex_map,vertex_to_vertex_len, visited)
-                if dist >= 0:
-                    dist += vertex_to_vertex_len[(st,n)]
-                    if longest < dist:
-                        longest = dist
-                        longest_path = pth
+                    longest_path = pth
     return longest, [st]+longest_path
 
 #paths = find_all_paths(start,end,vertices,vertex_to_vertex_map,vertex_to_vertex_len)
@@ -231,6 +224,30 @@ def draw_map(mapin,path):
 longest,pth = find_longest_path(start,end,vertices, vertex_to_vertex_map, vertex_to_vertex_len)
 ic(pth)
 ic(longest)
+
+segments_taken = [(st,end) for (st,end) in zip(pth[:-1],pth[1:])]
+with open("graph.dot","w") as fout:
+    fout.write("digraph mygraph {\n")
+    drawn = set()
+    for a,b in segments_taken:
+        length = vertex_to_vertex_len[(a,b)]
+        fout.write(f'  "{a}" [style="filled",color="#ff6666"]')
+        fout.write("\n")
+        fout.write(f'  "{b}" [style="filled",color="#ff6666"]')
+        fout.write("\n")
+        fout.write(f'  "{a}" -> "{b}" [color="#ff0000",label="{length}"]')
+        fout.write("\n")
+        drawn.add((a,b))
+        drawn.add((b,a))
+    for k,length in vertex_to_vertex_len.items():
+        a,b = k
+        if (a,b) not in drawn:
+            fout.write(f'  "{a}" -> "{b}" [color="#0000ff",label="{length}"]')
+            fout.write("\n")
+            drawn.add((a,b))
+            drawn.add((b,a))
+    fout.write("}\n")
+        
 
 full_path = set()
 for st,end in zip(pth[:-1],pth[1:]):
