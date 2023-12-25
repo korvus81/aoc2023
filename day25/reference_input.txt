@@ -1,0 +1,13 @@
+                          --- Day 25: Snowverload ---                           
+                      https://adventofcode.com/2023/day/25                      
+------------------------------- Example data 1/1 -------------------------------
+SYSTEM OVERLOAD!
+
+Connected components would require
+power equal to at least 100 stars!
+--------------------------------------------------------------------------------
+answer_a: 54
+answer_b: -
+--------------------------------------------------------------------------------
+
+
